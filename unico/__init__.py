@@ -65,6 +65,23 @@ def codes_for_ranges(seq):
   return chain.from_iterable(range(*r) for r in seq)
 
 
+def ranges_for_codes(seq):
+  it = iter(seq)
+  try: first = next(it)
+  except StopIteration: return
+  low = first
+  end = first + 1
+  for el in it:
+    if el < end: raise ValueError(el)
+    if el == end:
+      end += 1
+    else:
+      yield (low, end)
+      low = el
+      end = el + 1
+  yield (low, end)
+
+
 def coalesce_sorted_ranges(seq):
   it = iter(seq)
   try: low, end = next(it)
