@@ -39,13 +39,28 @@ def _gen_charsets():
   for k, plane in abbreviated_planes.items():
     charsets[k] = plane
 
+  def add(name, abbr, *ranges):
+    charsets[name] = tuple(ranges)
+    if abbr: charsets[abbr] = charsets[name]
+
   # Control characters. Note that 'Cc' also includes 0x7F (DEL).
-  charsets['C0'] = ((0x0000, 0x0020),)
-  charsets['C1'] = ((0x0080, 0x00A0),)
+  add('Control_0', 'C0', (0x0000, 0x0020))
+  add('Control_1', 'C1', (0x0080, 0x00A0))
+
+  # Common numeric sets for programming languages.
+  add('Binary',   None, (0x30, 0x32))
+  add('Octal',    None, (0x30, 0x38))
+  add('Decimal',  None, (0x30, 0x3A)) # remove as redundant with Ascii_Number?
+  add('Hexadecimal', 'Hex', (0x30, 0x3A), (0x41, 0x47), (0x61, 0x67))
 
   # Ascii.
-  charsets['Ascii'] = ((0x00, 0x80),)
-  charsets['A'] = charsets['Ascii']
+  add('Ascii', 'A', (0x00, 0x80))
+  Ascii = charsets['Ascii']
+
+  for cat in unicode_categories:
+    ranges = tuple(intersect_coalesced_ranges(Ascii, charsets[cat.name]))
+    if not ranges: continue
+    add('Ascii_' + cat.name, 'A' + cat.key, *ranges)
 
   return charsets
 
