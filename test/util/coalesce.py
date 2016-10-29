@@ -12,8 +12,8 @@ utest_seq([(0, 2), (3, 8)], union_sorted_ranges, [(0, 1), (3, 7)], [(1, 2), (4, 
 
 
 def test_intersect(exp, a, b):
-  utest_seq(exp, intersect_coalesced_ranges, a, b)
-  utest_seq(exp, intersect_coalesced_ranges, b, a)
+  utest_seq(exp, intersect_sorted_ranges, a, b)
+  utest_seq(exp, intersect_sorted_ranges, b, a)
 
 test_intersect([], [], [])
 test_intersect([(0, 1), (2, 3)], [(0, 1), (2, 3)], [(0, 1), (2, 3)])

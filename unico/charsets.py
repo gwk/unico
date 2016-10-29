@@ -2,7 +2,7 @@
 from bisect import bisect
 from itertools import chain
 
-from . import abbreviated_planes, intersect_coalesced_ranges
+from . import abbreviated_planes, intersect_sorted_ranges
 from .categories import unicode_categories, unicode_category_aliases
 from .data_09_00 import blocks, category_ranges
 
@@ -58,7 +58,7 @@ def _gen_charsets():
   Ascii = charsets['Ascii']
 
   for cat in unicode_categories:
-    ranges = tuple(intersect_coalesced_ranges(Ascii, charsets[cat.name]))
+    ranges = tuple(intersect_sorted_ranges(Ascii, charsets[cat.name]))
     if not ranges: continue
     add('Ascii_' + cat.name, 'A' + cat.key, *ranges)
 

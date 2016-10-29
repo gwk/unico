@@ -104,7 +104,7 @@ def union_sorted_ranges(*seqs):
   return coalesce_sorted_ranges(sorted(chain(*seqs)))
 
 
-def intersect_coalesced_ranges(seq_a, seq_b):
+def intersect_sorted_ranges(seq_a, seq_b):
   iter_a = iter(seq_a)
   iter_b = iter(seq_b)
   try: # iteration scope.
