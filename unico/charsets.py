@@ -2,7 +2,7 @@
 from bisect import bisect
 from itertools import chain
 
-from . import abbreviated_planes, intersect_sorted_ranges
+from . import abbreviated_planes, intersect_sorted_ranges, union_sorted_ranges
 from .categories import unicode_categories, unicode_category_aliases
 from .data_09_00 import blocks, category_ranges
 
@@ -61,6 +61,14 @@ def _gen_charsets():
   add('Octal',    None, (0x30, 0x38))
   add('Decimal',  None, (0x30, 0x3A)) # remove as redundant with Ascii_Number?
   add('Hexadecimal', 'Hex', (0x30, 0x3A), (0x41, 0x47), (0x61, 0x67))
+
+  # Miscellaneous.
+
+  add('Visible', 'V', *union_sorted_ranges(*[charsets[k] for k in ['L', 'M', 'N', 'P', 'S']]))
+  add('Readable', 'R', *union_sorted_ranges(*[charsets[k] for k in ['L', 'M', 'N', 'P', 'S', 'Z']]))
+
+  add('Ascii_Visible', 'AV', *intersect_sorted_ranges(Ascii, charsets['V']))
+  add('Ascii_Readable', 'AR', *intersect_sorted_ranges(Ascii, charsets['R']))
 
   return charsets
 
