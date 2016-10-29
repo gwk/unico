@@ -43,6 +43,15 @@ def _gen_charsets():
     charsets[name] = tuple(ranges)
     if abbr: charsets[abbr] = charsets[name]
 
+  # Ascii.
+  add('Ascii', 'A', (0x00, 0x80))
+  Ascii = charsets['Ascii']
+
+  for cat in unicode_categories:
+    ranges = tuple(intersect_sorted_ranges(Ascii, charsets[cat.name]))
+    if not ranges: continue
+    add('Ascii_' + cat.name, 'A' + cat.key, *ranges)
+
   # Control characters. Note that 'Cc' also includes 0x7F (DEL).
   add('Control_0', 'C0', (0x0000, 0x0020))
   add('Control_1', 'C1', (0x0080, 0x00A0))
@@ -52,15 +61,6 @@ def _gen_charsets():
   add('Octal',    None, (0x30, 0x38))
   add('Decimal',  None, (0x30, 0x3A)) # remove as redundant with Ascii_Number?
   add('Hexadecimal', 'Hex', (0x30, 0x3A), (0x41, 0x47), (0x61, 0x67))
-
-  # Ascii.
-  add('Ascii', 'A', (0x00, 0x80))
-  Ascii = charsets['Ascii']
-
-  for cat in unicode_categories:
-    ranges = tuple(intersect_sorted_ranges(Ascii, charsets[cat.name]))
-    if not ranges: continue
-    add('Ascii_' + cat.name, 'A' + cat.key, *ranges)
 
   return charsets
 
