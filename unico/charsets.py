@@ -57,10 +57,10 @@ def _gen_charsets():
   add('Control_1', 'C1', (0x0080, 0x00A0))
 
   # Common numeric sets for programming languages.
-  add('Binary',   None, (0x30, 0x32))
-  add('Octal',    None, (0x30, 0x38))
-  add('Decimal',  None, (0x30, 0x3A)) # remove as redundant with Ascii_Number?
-  add('Hexadecimal', 'Hex', (0x30, 0x3A), (0x41, 0x47), (0x61, 0x67))
+  add('Binary',       'Bin', (0x30, 0x32))
+  add('Octal',        'Oct', (0x30, 0x38))
+  add('Decimal',      'Dec', (0x30, 0x3A)) # remove as redundant with Ascii_Number?
+  add('Hexadecimal',  'Hex', (0x30, 0x3A), (0x41, 0x47), (0x61, 0x67))
 
   # Miscellaneous.
 
