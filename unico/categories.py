@@ -4,7 +4,12 @@ from collections import Counter
 from typing import NamedTuple
 
 
-UnicodeCategory = NamedTuple('UnicodeCategory', (('key', str), ('name', str), ('desc', str), ('subs', tuple)))
+class UnicodeCategory(NamedTuple):
+  key: str
+  name: str
+  desc: str
+  subs: tuple
+
 
 def _mk_cat(key, name, desc):
   subs = desc.split(' | ')
