@@ -13,7 +13,7 @@ class UnicodeCategory(NamedTuple):
 
 def _mk_cat(key, name, desc):
   subs = desc.split(' | ')
-  return UnicodeCategory(key=key, name=name, desc=desc, subs=(subs if len(subs) > 1 else ()))
+  return UnicodeCategory(key=key, name=name, desc=desc, subs=tuple(subs if len(subs) > 1 else ()))
 
 
 unicode_categories = [ # taken directly from: http://www.unicode.org/reports/tr44/#General_Category_Values.
