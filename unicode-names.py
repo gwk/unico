@@ -2,7 +2,7 @@
 
 import unicodedata
 
-from pithy import *
+from pithy.io import *
 
 
 # https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Special-purpose_Plane
@@ -68,9 +68,9 @@ for s, e in ranges:
       continue
     assert name.isupper()
     words = name.split()
-    
+
     if set(words).issuperset(query):
-      errFL('\\u{:04X} = {!r} # {}.', ord(c), c, name)
+      errL(f'\\u{ord(c):04X} = {c!r} # {name}.')
 
     #for word in words:
     #  words_to_infos[word].add((c, name))
