@@ -1,11 +1,13 @@
 # Dedicated to the public domain under CC0: https://creativecommons.org/publicdomain/zero/1.0/.
 
 from itertools import chain
-from typing import Collection, Iterable, Tuple
+from typing import Collection, Dict, Iterable, Tuple
 
 
-CodeRange = Tuple[int, int]
 # use pairs instead of real range objects because they are sortable, and faster to load in the interpreter.
+CodeRange = Tuple[int, int]
+CodeRanges = Tuple[CodeRange, ...]
+
 
 # These (real) ranges are provided merely as a reference / convenience to the user.
 ascii_range = range(0x80)
@@ -16,7 +18,7 @@ low_surrogates  = (0xDC00, 0xE000)
 surrogates = (high_surrogates[0], low_surrogates[1])
 
 
-planes = (
+planes: Tuple[CodeRanges, ...] = (
   ( # 0: Basic Multilingual Plane.
     # Note: the surrogates range is excluded because those code points are not legally encodable.
     (0x0000, surrogates[0]),
@@ -54,7 +56,7 @@ planes = (
   ),
 )
 
-abbreviated_planes = {
+abbreviated_planes: Dict[str, CodeRanges]  = {
   'BMP': planes[0],
   'SMP': planes[1],
   'SIP': planes[2],

@@ -1,13 +1,15 @@
+# Dedicated to the public domain under CC0: https://creativecommons.org/publicdomain/zero/1.0/.
 
 from bisect import bisect
 from itertools import chain
+from typing import Dict, Tuple
 
-from . import abbreviated_planes, intersect_sorted_ranges, union_sorted_ranges
+from . import CodeRange, CodeRanges, abbreviated_planes, intersect_sorted_ranges, union_sorted_ranges
 from .categories import unicode_categories, unicode_category_aliases
 from .data_09_00 import blocks, category_ranges
 
 
-def is_code_in_charset(code, charset):
+def is_code_in_charset(code, charset: CodeRanges) -> bool:
   p = (code, code)
   i = bisect(charset, p)
   if i < len(charset):
@@ -17,8 +19,8 @@ def is_code_in_charset(code, charset):
   return i > 0 and code < charset[i - 1][1]
 
 
-def _gen_charsets():
-  charsets = {}
+def _gen_charsets() -> Dict[str, CodeRanges]:
+  charsets: Dict[str, CodeRanges] = {}
 
   # categories.
   for cat in unicode_categories:
@@ -39,7 +41,7 @@ def _gen_charsets():
   for k, plane in abbreviated_planes.items():
     charsets[k] = plane
 
-  def add(name, abbr, *ranges):
+  def add(name: str, abbr: str, *ranges: CodeRange) -> None:
     charsets[name] = tuple(ranges)
     if abbr: charsets[abbr] = charsets[name]
 
