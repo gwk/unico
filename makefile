@@ -15,6 +15,8 @@ clean:
 gen: \
 	unico/data_09_00.py
 
+typecheck:
+	mypy-plumage unico
 
 unico/data_09_00.py: gen-data.py
 	./$^ data-09.0 > $@

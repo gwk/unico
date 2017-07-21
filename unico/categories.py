@@ -1,19 +1,18 @@
 # Dedicated to the public domain under CC0: https://creativecommons.org/publicdomain/zero/1.0/.
 
-from collections import Counter
-from typing import NamedTuple
+from typing import Counter, Dict, NamedTuple, Tuple
 
 
 class UnicodeCategory(NamedTuple):
   key: str
   name: str
   desc: str
-  subs: tuple
+  subcategories: Tuple[str, ...]
 
 
-def _mk_cat(key, name, desc):
+def _mk_cat(key: str, name: str, desc: str) -> UnicodeCategory:
   subs = desc.split(' | ')
-  return UnicodeCategory(key=key, name=name, desc=desc, subs=tuple(subs if len(subs) > 1 else ()))
+  return UnicodeCategory(key=key, name=name, desc=desc, subcategories=tuple(subs if len(subs) > 1 else []))
 
 
 unicode_categories = [ # taken directly from: http://www.unicode.org/reports/tr44/#General_Category_Values.
@@ -57,11 +56,11 @@ unicode_categories = [ # taken directly from: http://www.unicode.org/reports/tr4
   _mk_cat('C',  'Other',                 'Cc | Cf | Cs | Co | Cn'),
 ]
 
-def _aliases():
+def _aliases() -> Dict[str, UnicodeCategory]:
   aliases = { cat.key : cat for cat in unicode_categories }
   aliases.update((cat.name, cat) for cat in unicode_categories)
   # add first-word aliases wherever they are unambiguous.
-  first_word_counts = Counter()
+  first_word_counts: Counter[str] = Counter()
   first_word_categories = {}
   for cat in unicode_categories:
     first = cat.name.partition('_')[0]

@@ -1,8 +1,13 @@
 # Dedicated to the public domain under CC0: https://creativecommons.org/publicdomain/zero/1.0/.
 
 from itertools import chain
+from typing import Collection, Iterable, Tuple
 
 
+CodeRange = Tuple[int, int]
+# use pairs instead of real range objects because they are sortable, and faster to load in the interpreter.
+
+# These (real) ranges are provided merely as a reference / convenience to the user.
 ascii_range = range(0x80)
 unicode_range = range(0x110000)
 
@@ -61,11 +66,12 @@ abbreviated_planes = {
 all_plane_ranges = tuple(chain(*(planes)))
 
 
-def codes_for_ranges(seq):
+def codes_for_ranges(seq: Iterable[CodeRange]) -> Iterable[int]:
   return chain.from_iterable(range(*r) for r in seq)
 
 
-def ranges_for_codes(seq):
+def ranges_for_codes(seq: Iterable[int]) -> Iterable[CodeRange]:
+  'codes must be sorted.'
   it = iter(seq)
   try: first = next(it)
   except StopIteration: return
@@ -82,7 +88,7 @@ def ranges_for_codes(seq):
   yield (low, end)
 
 
-def coalesce_sorted_ranges(seq):
+def coalesce_sorted_ranges(seq: Iterable[CodeRange]) -> Iterable[CodeRange]:
   it = iter(seq)
   try: low, end = next(it)
   except StopIteration: return
@@ -90,7 +96,7 @@ def coalesce_sorted_ranges(seq):
     l, e = r
     if e < l: raise ValueError(r) # bad range element.
     if l < low:
-      raise ValueError('coalesce_sorted_ranges encountered unsorted range element: {!r}; current coalesced range: {!r}', r, (low, end))
+      raise ValueError(f'coalesce_sorted_ranges encountered unsorted range element: {r!r}; current coalesced range: {(low, end)}')
     if l <= end:
       end = max(end, e)
     else:
@@ -100,11 +106,11 @@ def coalesce_sorted_ranges(seq):
   yield (low, end)
 
 
-def union_sorted_ranges(*seqs):
+def union_sorted_ranges(*seqs: Iterable[CodeRange]) -> Iterable[CodeRange]:
   return coalesce_sorted_ranges(sorted(chain(*seqs)))
 
 
-def intersect_sorted_ranges(seq_a, seq_b):
+def intersect_sorted_ranges(seq_a: Iterable[CodeRange], seq_b: Iterable[CodeRange]) -> Iterable[CodeRange]:
   iter_a = iter(seq_a)
   iter_b = iter(seq_b)
   try: # iteration scope.

@@ -22,8 +22,8 @@ def _gen_charsets():
 
   # categories.
   for cat in unicode_categories:
-    if cat.subs:
-      charsets[cat.key] = tuple(sorted(chain(*(category_ranges[k] for k in cat.subs))))
+    if cat.subcategories:
+      charsets[cat.key] = tuple(sorted(chain(*(category_ranges[k] for k in cat.subcategories))))
     else:
       charsets[cat.key] = category_ranges[cat.key]
   # add aliases in a second pass to reuse range values by reference.
